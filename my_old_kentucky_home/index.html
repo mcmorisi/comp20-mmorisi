@@ -18,16 +18,18 @@
         var lyrics = document.getElementById("lyrics");
         if(vid.currentTime >= 8 && vid.currentTime < 14)
             lyrics.innerHTML = 
-                    "<p>The sun shines bright in My Old Kentucky Home,</p>";
+                    "<p>The sun shines bright in my old Kentucky home,</p>";
         if(vid.currentTime >= 14 && vid.currentTime < 21)
             lyrics.innerHTML = 
                     "<p>'Tis summer, the people are gay</p>";
         if(vid.currentTime >= 21 && vid.currentTime < 28)
             lyrics.innerHTML = 
                     "<p>The corn-top's ripe and the meadow's in the bloom</p>";
-        if(vid.currentTime >= 28 && vid.currentTime < 35)
+        if(vid.currentTime >= 28 && vid.currentTime < 35) {
             lyrics.innerHTML = 
                     "<p>While the birds make music all the day.</p>";
+            lyrics.innerHTML += "<img src = 'birds.jpg' alt = 'Birds'>";
+        }
         if(vid.currentTime >= 35 && vid.currentTime < 41)
             lyrics.innerHTML = 
                     "<p>The young folks roll on the little cabin floor,</p>";
@@ -48,11 +50,12 @@
                     "<p>Oh weep no more today;</p>";
         if(vid.currentTime >= 75 && vid.currentTime < 83)  
             lyrics.innerHTML = 
-                    "<p>We will sing one song For My Old Kentucky Home</p>";
-        if(vid.currentTime >= 83)
+                    "<p>We will sing one song for my old Kentucky home</p>";
+        if(vid.currentTime >= 83) {
             lyrics.innerHTML = 
-                    "<p>For My Old Kentucky Home, far away</p>";
-
+                    "<p>For my old Kentucky home, far away</p>";
+            lyrics.innerHTML += "<img src = 'kentucky.png' alt = 'Kentucky'>";
+        }
     }
 
     vid = document.getElementById("music_video");
