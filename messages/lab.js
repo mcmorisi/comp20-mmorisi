@@ -10,7 +10,8 @@ function parse() {
                         out = "";
                         
                         for(i = 0; i < data.length; i++) {
-                                out += "<p>" + data[i].content + " - " + data[i].username + "</p>";
+                                out += "<p>" + data[i].content + " - " + 
+                                        data[i].username + "</p>";
                         }
 
                         messages.innerHTML = out;
