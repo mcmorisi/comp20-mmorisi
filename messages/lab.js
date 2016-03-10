@@ -1,22 +1,20 @@
-var xmlhttp = new XMLHttpRequest();
-var url = "data.json";
-xmlhttp.open("GET", url, true);
+function parse() {
+        request = new XMLHttpRequest();
+        request.open("GET", "data.json", true);
+        messages = document.getElementById("messages");
 
+        request.onreadystatechange = function() {
+                if(request.readyState == 4 && request.status == 200) {
+                        raw = request.responseText;
+                        data = JSON.parse(raw);
+                        out = "";
+                        
+                        for(i = 0; i < data.length; i++) {
+                                out += "<p>" + data[i].content + " - " + data[i].username + "</p>";
+                        }
 
-xmlhttp.onreadystatechange = function() {
-        if(xmlhttp.readyState == 4 && xmlhttp.status = 200) {
-                data = JSON.parse(xmlhttp.responseText);
-                printMsg(data);
+                        messages.innerHTML = out;
+                }
         }
-};
-
-function printMsg(arr) {
-        var out = "";
-        var output = getElementById("messages").innerHTML;
-        for(i = 0; i < arr.length, i++) {
-                out += "<span class='msg'>" + arr[i]["content"] +
-                        " - " + arr[i]["username"] + "</span><br>";
-        }
-
-        output = out;
+        request.send(null);
 }

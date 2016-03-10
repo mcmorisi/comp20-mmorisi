@@ -1,1 +1,8 @@
-/* Your CSS here... */
+#messages {
+        border-style = solid;
+}
+
+p {
+        font-size: 20px;
+        font-family: "Trebuchet MS";
+}
