@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8" />
+        <title>Landmarks</title>
+        <link rel="stylesheet" href="style.css" type="text/css" />
+        <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+</head>
+
+<script>
+
+        if(navigator.geolocation) {
+                var position = navigator.geolocation.getCurrentPosition(getLocation);
+        } else {
+                alert("Your browser doesn't support geolocation!");
+        }
+
+        function getLocation(position) {
+                myLat = position.coords.latitude;
+                myLon = position.coords.longitude;
+
+                initMap(myLat, myLon);
+
+                var url = "https://defense-in-derpth.herokuapp.com/sendLocation";
+                var params = "login=ANTOINETTE_STEELE&lat=" + myLat + "&lng=" + myLon;
+                console.log(params);
+
+                request = new XMLHttpRequest();
+                request.open("POST", url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.send(params)
+        }
+
+        function initMap(myLat, myLon) {
+                latlng = new google.maps.LatLng();
+                map = new google.maps.Map(document.getElementById("map_canvas"), {
+                        center: {lat: myLat, lng: myLon}, 
+                        zoom: 14
+                });
+        }
+
+
+
+        
+</script>
+
+<body>
+        <div id="map_canvas"></div>
+</body>
+
+</html>
