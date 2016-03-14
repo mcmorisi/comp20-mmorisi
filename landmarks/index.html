@@ -84,20 +84,23 @@
                         var myLatLng = new google.maps.LatLng(lat, lng);
                         var contentString = "<b>User Name: </b>" + person.login + "<BR><b>Distance: </b>" + calcDistance(myLat, myLon, lat, lng) + " miles";
 
-                        var infowindow = new google.maps.InfoWindow({
-                                    content: contentString
-                        });
+                        if(person.login != username) {
+                                var infowindow = new google.maps.InfoWindow({
+                                            content: contentString
+                                });
 
-                        var marker = new google.maps.Marker({
-                                position: myLatLng,
-                                map: map,
-                                title: person.login,
-                                infowindow: "value",  infowindow
-                        });
+                                var marker = new google.maps.Marker({
+                                        position: myLatLng,
+                                        map: map,
+                                        title: person.login,
+                                        icon: "person.png",
+                                        infowindow: infowindow
+                                });
 
-                        google.maps.event.addListener(marker, 'click', function() {
-                                this.infowindow.open(map, this);
-                        });
+                                google.maps.event.addListener(marker, 'click', function() {
+                                        this.infowindow.open(map, this);
+                                });
+                        }
                 }
         }
 
