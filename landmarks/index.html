@@ -8,6 +8,8 @@
 </head>
 
 <script>
+        var username = "ANTOINETTE_STEELE";
+
 
         if(navigator.geolocation) {
                 var position = navigator.geolocation.getCurrentPosition(getLocation);
@@ -18,30 +20,161 @@
         function getLocation(position) {
                 myLat = position.coords.latitude;
                 myLon = position.coords.longitude;
+                // init map
+                map = new google.maps.Map(document.getElementById("map_canvas"), {
+                        center: {lat: myLat, lng: myLon}, 
+                        zoom: 14,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
 
-                initMap(myLat, myLon);
-
+                // Post current location and get landmarks json
                 var url = "https://defense-in-derpth.herokuapp.com/sendLocation";
-                var params = "login=ANTOINETTE_STEELE&lat=" + myLat + "&lng=" + myLon;
-                console.log(params);
+                var params = "login=" + username + "&lat=" + myLat + "&lng=" + myLon;
 
                 request = new XMLHttpRequest();
                 request.open("POST", url, true);
                 request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                request.send(params)
+                request.send(params);
+                request.onreadystatechange = function() {
+                        if(request.readyState == 4 && request.status == 200) {
+
+                                raw = request.responseText;
+                                locations = JSON.parse(raw);
+                                console.log(locations);
+
+                                placeMarkers(locations, map);
+                                placeYou(locations, myLat, myLon);
+                        }
+                }
         }
 
-        function initMap(myLat, myLon) {
-                latlng = new google.maps.LatLng();
-                map = new google.maps.Map(document.getElementById("map_canvas"), {
-                        center: {lat: myLat, lng: myLon}, 
-                        zoom: 14
+        function placeMarkers(locations, map) {
+                // Place markers for landmark locations
+
+                for(i = 0; i < locations.landmarks.length; i++) {
+                        var landmark = locations.landmarks[i];
+                        var lng = landmark.geometry.coordinates[0];
+                        var lat = landmark.geometry.coordinates[1];
+                        var myLatLng = new google.maps.LatLng(lat, lng);
+
+                        var contentString = landmark.properties.Details;
+
+                        var infowindow = new google.maps.InfoWindow({
+                                content: contentString
+                        });
+
+                        var marker = new google.maps.Marker({
+                                position: myLatLng,
+                                map: map,
+                                title: landmark.properties.Location_Name,
+                                icon: "landmarkicon.png",
+                                infowindow: infowindow
+                        });
+
+                        google.maps.event.addListener(marker, 'click', function() {
+                                this.infowindow.open(map, this);
+                        });
+                }
+
+                // Place markers for user locations
+                for(i = 0; i < locations.people.length; i++) {
+                        var person = locations.people[i];
+                        var lng = person.lng;
+                        var lat = person.lat;
+                        var myLatLng = new google.maps.LatLng(lat, lng);
+                        var contentString = "<b>User Name: </b>" + person.login + "<BR><b>Distance: </b>" + calcDistance(myLat, myLon, lat, lng) + " miles";
+
+                        var infowindow = new google.maps.InfoWindow({
+                                    content: contentString
+                        });
+
+                        var marker = new google.maps.Marker({
+                                position: myLatLng,
+                                map: map,
+                                title: person.login,
+                                infowindow: "value",  infowindow
+                        });
+
+                        google.maps.event.addListener(marker, 'click', function() {
+                                this.infowindow.open(map, this);
+                        });
+                }
+        }
+
+        function placeYou(locations, myLat, myLon) {
+                var closest = locations.landmarks[0];
+                for(i = 1; i < locations.landmarks.length; i++) {
+                        var curr_loc = locations.landmarks[i];
+                        var curr_lng = curr_loc.geometry.coordinates[0];
+                        var curr_lat = curr_loc.geometry.coordinates[1];
+
+                        var closest_lng = closest.geometry.coordinates[0];
+                        var closest_lat = closest.geometry.coordinates[1];
+                        if(calcDistance(myLat, myLon, curr_lat, curr_lng) < 
+                                calcDistance(myLat, myLon, closest_lat, closest_lng))
+                        {
+                                closest = curr_loc;
+                        }
+
+                }
+
+                var contentString = "<b>User Name: </b>" + username + "<BR><b>Closest landmark: </b>"
+                                        + closest.properties.Location_Name + "<BR><b>Distance to closest: </b>" + 
+                                        calcDistance(myLat, myLon, closest_lat, closest_lng) + " miles";
+
+                var infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                });
+                
+                var myLatLng = new google.maps.LatLng(myLat, myLon);
+                var marker = new google.maps.Marker({
+                        position: myLatLng,
+                        map: map,
+                        title: username,
+                        icon: "you.png",
+                        infowindow: infowindow
+                });
+
+                var polylineCoordinates = [
+                        {lat: myLat, lng: myLon},
+                        {lat: closest_lat, lng: closest_lng}
+                ];
+
+                var polyline = new google.maps.Polyline({
+                        path: polylineCoordinates,
+                        geodesic: true,
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 2
+                })
+
+                google.maps.event.addListener(marker, 'click', function() {
+                        this.infowindow.open(map, this);
+                        polyline.setMap(map);
                 });
         }
 
 
+        function calcDistance(lat1, lon1, lat2, lon2) {
+                Number.prototype.toRad = function() {
+                        return this * Math.PI / 180;
+                }
 
-        
+                var R = 3959; // mi 
+                
+                var x1 = lat2-lat1;
+                var dLat = x1.toRad();  
+                var x2 = lon2-lon1;
+                var dLon = x2.toRad();  
+                var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+                                Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                                Math.sin(dLon/2) * Math.sin(dLon/2);  
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                var d = R * c; 
+
+                return d;
+        }
+   
 </script>
 
 <body>

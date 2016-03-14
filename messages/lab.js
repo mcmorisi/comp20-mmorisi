@@ -16,6 +16,6 @@ function parse() {
 
                         messages.innerHTML = out;
                 }
-        }
+        };
         request.send(null);
 }
