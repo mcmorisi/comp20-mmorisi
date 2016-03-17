@@ -12,6 +12,7 @@
                         $("#msg").change(function() {
                                 var input = $("#msg").val();
                                 var time = new Date();
+                                var UTCstring = time.toUTCString();
 
                                 $("#log").prepend("<p>" + time + " - " + input + "</p>");
                                 $("#msg").val("");
