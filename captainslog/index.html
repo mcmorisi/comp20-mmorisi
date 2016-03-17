@@ -9,16 +9,14 @@
                 $(document).ready(function(){
                         loadPage();
 
-                        $("#msg").keypress(function(e) {
-                                if(e.which == 13) {
-                                        var input = $("#msg").val();
-                                        var time = new Date();
+                        $("#msg").change(function() {
+                                var input = $("#msg").val();
+                                var time = new Date();
 
-                                        $("#log").prepend("<p>" + time + " - " + input + "</p>");
-                                        $("#msg").val("");
+                                $("#log").prepend("<p>" + time + " - " + input + "</p>");
+                                $("#msg").val("");
 
-                                        savePage();
-                                }
+                                savePage();
                         });
 
                 });

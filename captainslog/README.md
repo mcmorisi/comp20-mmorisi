@@ -10,7 +10,6 @@ Things that come to mind for correct implementation are:
 * Messages are preserved upon refreshing the page (saved in localStorage)
 
 Nothing that comes to mind could have been implemented better.
-* Blank messages should not be permitted
 
 ## Acknowledgements
 * None
