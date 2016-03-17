@@ -12,7 +12,7 @@ Things that come to mind for correct implementation are:
 Nothing that comes to mind could have been implemented better.
 
 ## Acknowledgements
-* None
+* I discussed this assignment with Joseph Campbell
 
 ## Time spent
 About 30 minutes
