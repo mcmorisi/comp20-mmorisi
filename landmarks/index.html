@@ -28,7 +28,7 @@
                 });
 
                 // Post current location and get landmarks json
-                var url = "https://shielded-river-64315.heroku.com/sendLocation";
+                var url = "https://shielded-river-64315.herokuapp.com/sendLocation";
                 var params = "login=" + username + "&lat=" + myLat + "&lng=" + myLon;
 
                 request = new XMLHttpRequest();
@@ -158,8 +158,14 @@
 
         // Uses Haversine formula to calculate distance between 2 lat/lng coordinates
         function calcDistance(lat1, lon1, lat2, lon2) {
-                Number.prototype.toRad = function() {
+                if (typeof(Number.prototype.toRad) === "undefined") {
+                    Number.prototype.toRad = function() {
                         return this * Math.PI / 180;
+                    }
+                }
+
+                Number.prototype.toRad = function() {
+                    return this * Math.PI / 180;
                 }
 
                 var R = 3959; // mi 
@@ -169,7 +175,7 @@
                 var x2 = lon2-lon1;
                 var dLon = x2.toRad();  
                 var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-                                Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                                Math.cos(lat1.toRad()) * Math.cos(lat2 * Math.PI / 180) * 
                                 Math.sin(dLon/2) * Math.sin(dLon/2);  
                 var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
                 var d = R * c; 
