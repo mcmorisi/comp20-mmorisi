@@ -84,27 +84,20 @@
                     </li>
                 </ul>
             </li>
-            <li>Issue 3: Potential slowdown in loading index page
+            <li>Issue 3: Enabling CORS with wildcard
                 <ul>
-                    <li>Location: Static HTML portion of index.js</li>
-                    <li>Severity: Low. It's a minor coding practice issue
-                        that would only likely cause minimal slowdown.
+                    <li>Location: index.js</li>
+                    <li>Severity: High. Since anyone can make a server request,
+                        this is easily exploitable by malicious users.
                     </li>
-                    <li>Description: When using the index.js file to load the
-                        index page's HTML (containing all login names, locations,
-                        and checkin times), a loop is used to iterate the cursor
-                        through the list of checkins. Each time the loop iterates,
-                        the length of the cursor object is calculated, which could
-                        marginally slow down the runtime of the page loading.
-
+                    <li>Description: When Brinley enables CORS on her server,
+                        she uses the wildcard tag, indicating that all domains
+                        can send requests to the server.
                     </li>
-                    <li>Resolution: Simply making an external variable to store
-                        the value of cursor.length would fix this issue.
-                        Alternatively, there are usages of the mongodb find()
-                        function which sort and return database contents by a
-                        given field.
+                    <li>Resolution: By only enabling CORS for known,
+                        non-malicious domains, Brinley could filter out
+                        requests from more harmful origins.
                     </li>
-                    <img src="forloop.png" alt="Iffy loop coding practice">
 
                 </ul>
             </li>
