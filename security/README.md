@@ -13,7 +13,7 @@ hard to find security flaws when my partner had already built their site
 with certain security ideas in mind.
 
 ## Acknowledgements
-I discussed this assignment with Vincent Tsang, Tom Ring, David Bernstein, and
+I discussed this assignment with Vincent Tsang, Tom Rind, David Bernstein, and
 Ming Chow.
 
 ## Time spent
